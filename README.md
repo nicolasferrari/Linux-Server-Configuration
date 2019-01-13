@@ -38,6 +38,18 @@ sudo chown grader .ssh
 
 To get connection to the server with the grader account is necessary to run this command : ssh grader@3.82.189.241 -i ~/.ssh/key.pub
 
+Installation of Apache2, WSGI middleware Postgresql:
+
+I have installed these software with the following commands:
+
+sudo apt-get install apache2
+
+sudo apt-get install libapache2-mod-wsgi
+
+sudo apt-get install postgresql
+
+Change the /etc/apache2/sites-enabled/000-default.conf file with the command sudo nano /etc/apache2/sites-enabled/000-default.conf by adding the line WSGIScriptAlias / /var/www/html/myapp.wsgi. With this procedure I ensure that the app is in the default directory that Ubuntu recognize to store applications. 
+
 Some external resources that I use to made all this are: 
 
 https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
