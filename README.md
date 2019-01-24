@@ -1,14 +1,25 @@
 # Linux-Server-Configuration
 
-I would describe the steps in order to set up and configure a Linux Server, based on an instance of lightsail Amazon Web Service. After that I would install apache 2 and postgresql server with the aim to host and deploy the item-catalog application.
+I would describe the steps in order to set up and configure a Linux Server, based on an instance of lightsail Amazon Web Service. This was part of the Full Stack Developer Nano Degree course from Udacity and the project was Linux Server Configuration. 
+
 
 Information about Lightsail Linux Instance:
 
-Public IP Address: 3.82.189.241 Port: 2200 
+Public IP Address: 3.82.189.241 
 
-Once I get the Lightsail Ubuntu instance from Amazon Web Service, I have upgraded all the packages that this distribution has with the command sudo apt-get upgrade. Then I proceed to configure the Firewalls by adding a custom port 2200 in the Networking tab of the amazon web service site account. In order to allow this port I have to added it in the sshd_config file that is within the etc/ssh/sshd_confif file. The default port on this file was port 22, and in my case I added Port 2200 below Port 22.
+Port: 2200 
 
-Afterwards I run a set of commands in order to change the status of UFW by adding some rules to the firewall and allow incoming connectios from  port 2200/tcp(SSH) as well as port 80(HTTP) and port 123(NTP). These commands consist on: 
+## Amazon Lightsail instance
+
+Create an instance on Amazon Lightsail in Linux platform with Ubuntu 16.04 LTS. Once you get the instance, connected using the Orange button Connecting Using SSH. When reach to the Linux platform is necessary to made some steps configuration described below that will be done with the ubuntu default user. These steps are required in order to upgrade Linux packages and configure the Firewall required of this project: 
+
+sudo apt-get upgrade
+
+sudo apt-get update 
+
+add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
+
+on the Amazon Ligthsail web site, add a custom port 2200 in the Networking tab 
 
 sudo ufw default deny incoming (by default deny all incoming connections)
 
@@ -26,15 +37,84 @@ sudo ufw allow 123
 
 sudo ufw enable (to enable the firewall)
 
-I install finger tool to check the users that can access the server. Then I created the grader user with sudo add grader and give it sudo  privileges. In order to allow key pair authentication to the grader user I use the tool ssh-keygen on my machine and past the public key on the authorized_keys file under the /home/grader/.ssh directory. I change permissions to the .ssh directory and the 
-authorized_keys with 
+
+## Create the Grader User 
+
+The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user to the server. This consist of a public and private key that work together. The public key would be copy to the server and the private key is the key that the user store in it computer and use to connect to the server. The public key would be copy to the /home/grader/.ssh/authorized_keys file. The commands are the following:
+
+The following command should be running from the server: 
+
+sudo add grader. Create the grader user
+
+sudo usermod -a -G sudo grader. This give sudo permissions to the grader user 
+
+su - grader. To change to the grader user in the Linux screen
+
+mkdir .ssh. Create the .ssh dirctory in Linux
+
+touch .ssh/authorized_keys. Create the file authorized_keys under the .ssh dirctory
+
+From your local computer run the following command: 
+
+ssh-keygen. 
+
+This command generate two keys, one public and one private. The public key has to be copy to the authorized_keys file on the Linux instance. Finally change permissions to the .ssh directory and the authorized_keys:
 
 chmod 700 /home/grader/.ssh
 
 chmod 644 /home/grader/.ssh/authorized_keys
 
-Finally I have to change the owner of the directory and authorized_keys file with:
+Finally, change the owner of the directory and authorized_keys file with:
 sudo chown grader .ssh
+
+service ssh restart
+
+now you can use ssh to login with the new user you created
+
+ssh -i [privateKeyFilename] grader@3.82.189.241 
+
+After run this command, open the public key generated in your computer and copy it. Afterwards createI install finger tool to check the users that can access the server. Then I created the grader user with sudo add grader and give it sudo  privileges. In order to allow ssh authentication to the grader user I use the tool ssh-keygen on my machine and paste the public key on the authorized_keys file under the /home/grader/.ssh directory. I change permissions to the .ssh directory and the 
+authorized_keys with 
+
+# Application Functionality
+
+This app would be deployed using Flask, Apache2 and Postgresql in Linux remote system using Amazon Lightsail. The following  steps consists on the configuration of a database and a web server as well as clone the Flask application to the Linux instance. The WSGI module will be used as an interface between Flask and Apache Server.  
+
+Install and configure Apache to serve a Python mod_wsgi application
+
+Install Apache sudo apt-get install apache2
+
+Install mod_wsgi sudo apt-get install libapache2-mod-wsgi-py3
+
+Install git, clone and setup your Catalog App project
+
+Install Git using sudo apt-get install git
+
+Use cd /var/www to move to the /var/www directory
+
+Create the application directory sudo mkdir catalogapp
+
+Move inside this directory using cd Catalogapp
+
+Clone the Catalog App to the virtual machine git clone https://github.com/nicolasferrari/catalogapp.git catalogapp
+
+
+Move into the /var/www/catalogapp/catalogapp 
+
+Rename application.py file to __init__.py using sudo mv application.py __init__.py
+
+
+Edit database_setup.py, website.py and functions_helper.py and change engine = create_engine('sqlite:///toyshop.db') to engine = 
+
+create_engine('postgresql://catalog:password@localhost/catalog')
+
+Install pip sudo apt-get install python-pip
+
+Use pip to install dependencies sudo pip install -r requirements.txt
+
+Install psycopg2 sudo apt-get -qqy install postgresql python-psycopg2
+
+Create database schema sudo python database_setup.py
 
 To get connection to the server with the grader account is necessary to run this command : ssh grader@3.82.189.241 -i ~/.ssh/key.pub
 
