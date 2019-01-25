@@ -13,27 +13,27 @@ Port: 2200
 
 Create an instance on Amazon Lightsail in Linux platform with Ubuntu 16.04 LTS. Once you get the instance, connected using the Orange button "Connecting Using SSH". When get into the Linux platform is necessary to made some steps configuration described below that will be done with the ubuntu default user. These steps are required in order to upgrade Linux packages and configure the Firewall required for this project: 
 
-* sudo apt-get upgrade
-* sudo apt-get update 
-* sudo nano cd etc/.ssh/sshd_config. Add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
+* ``` sudo apt-get upgrade ```
+* ``` sudo apt-get update ``` 
+* ``` sudo nano cd etc/.ssh/sshd_config ``` Add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
 
 * On Amazon Ligthsail web site, add a custom port 2200 in the Networking tab 
 
-* sudo ufw default deny incoming (by default deny all incoming connections)
+* ``` sudo ufw default deny incoming ``` (by default deny all incoming connections)
 
-* sudo ufw default allow outgoing (default to deny  outgoing connections)
+* ``` sudo ufw default allow outgoing ``` (default to deny  outgoing connections)
 
 Configure firewalls rules:
 
-* sudo ufw allow ssh
+* ```sudo ufw allow ssh```
 
-* sudo ufw allow 2200/tcp (allow all TCP connections through port 2200)
+* ```sudo ufw allow 2200/tcp``` (allow all TCP connections through port 2200)
 
-* sudo ufw allow 80/tcp
+* ```sudo ufw allow 80/tcp```
 
-* sudo ufw allow 123 
+* ```sudo ufw allow 123``` 
 
-* sudo ufw enable (to enable the firewall)
+* ```sudo ufw enable``` (to enable the firewall)
 
 
 ## Create the Grader User 
@@ -42,13 +42,13 @@ The following commands will be executed in order to create the grader user and a
 
 The following commands should be running from the server: 
 
-* sudo add grader. Create the grader user
+* ```sudo add grader``` Create the grader user
 
-* sudo usermod -a -G sudo grader. This give sudo permissions to the grader user 
+* ```sudo usermod -a -G sudo grader``` This give sudo permissions to the grader user 
 
-* su - grader. To change to the grader user in the Linux platform
+* ```su - grader``` To change to the grader user in the Linux platform
 
-* mkdir .ssh. Create the .ssh dirctory in Linux
+* ```mkdir .ssh``` Create the .ssh dirctory in Linux
 
 * touch .ssh/authorized_keys. Create the file authorized_keys in the .ssh directory
 
