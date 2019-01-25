@@ -1,9 +1,9 @@
 # Linux-Server-Configuration
 
-I would describe the steps in order to set up and configure a Linux Server, based on an instance of lightsail Amazon Web Service. This was part of the Full Stack Developer Nano Degree course from Udacity and the project was Linux Server Configuration. 
+I would describe the steps in order to set up and configure a Linux Server, based on an instance on Lightsail Amazon Web Service that would host a Flask app. This was part of the Full Stack Developer Nano Degree course from Udacity and the project was Linux Server Configuration. 
 
 
-Information about Lightsail Linux Instance:
+Information about Amazon Lightsail Linux Instance:
 
 Public IP Address: 3.82.189.241 
 
@@ -11,82 +11,83 @@ Port: 2200
 
 ## Amazon Lightsail instance
 
-Create an instance on Amazon Lightsail in Linux platform with Ubuntu 16.04 LTS. Once you get the instance, connected using the Orange button Connecting Using SSH. When reach to the Linux platform is necessary to made some steps configuration described below that will be done with the ubuntu default user. These steps are required in order to upgrade Linux packages and configure the Firewall required of this project: 
+Create an instance on Amazon Lightsail in Linux platform with Ubuntu 16.04 LTS. Once you get the instance, connected using the Orange button "Connecting Using SSH". When get into the Linux platform is necessary to made some steps configuration described below that will be done with the ubuntu default user. These steps are required in order to upgrade Linux packages and configure the Firewall required for this project: 
 
-sudo apt-get upgrade
+* sudo apt-get upgrade
+* sudo apt-get update 
+* sudo nano cd etc/.ssh/sshd_config. Add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
 
-sudo apt-get update 
+* On Amazon Ligthsail web site, add a custom port 2200 in the Networking tab 
 
-add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
+* sudo ufw default deny incoming (by default deny all incoming connections)
 
-on the Amazon Ligthsail web site, add a custom port 2200 in the Networking tab 
-
-sudo ufw default deny incoming (by default deny all incoming connections)
-
-sudo ufw default allow outgoing (default to deny  outgoing connections)
+* sudo ufw default allow outgoing (default to deny  outgoing connections)
 
 Configure firewalls rules:
 
-sudo ufw allow ssh
+* sudo ufw allow ssh
 
-sudo ufw allow 2200/tcp (allow all TCP connections through port 2200)
+* sudo ufw allow 2200/tcp (allow all TCP connections through port 2200)
 
-sudo ufw allow 80/tcp
+* sudo ufw allow 80/tcp
 
-sudo ufw allow 123 
+* sudo ufw allow 123 
 
-sudo ufw enable (to enable the firewall)
+* sudo ufw enable (to enable the firewall)
 
 
 ## Create the Grader User 
 
-The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user to the server. This consist of a public and private key that work together. The public key would be copy to the server and the private key is the key that the user store in it computer and use to connect to the server. The public key would be copy to the /home/grader/.ssh/authorized_keys file. The commands are the following:
+The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user into the server. The ssh authentication consist of a public and private key that work together. The public key would be copy to the server and the private key is the key that the user store in it computer and use to connect to the server. The public key would be copy to the /home/grader/.ssh/authorized_keys file in the Linux platform. 
 
 The following command should be running from the server: 
 
-sudo add grader. Create the grader user
+* sudo add grader. Create the grader user
 
-sudo usermod -a -G sudo grader. This give sudo permissions to the grader user 
+* sudo usermod -a -G sudo grader. This give sudo permissions to the grader user 
 
-su - grader. To change to the grader user in the Linux screen
+* su - grader. To change to the grader user in the Linux screen
 
-mkdir .ssh. Create the .ssh dirctory in Linux
+* mkdir .ssh. Create the .ssh dirctory in Linux
 
-touch .ssh/authorized_keys. Create the file authorized_keys under the .ssh dirctory
+* touch .ssh/authorized_keys. Create the file authorized_keys in the .ssh dirctory
 
 From your local computer run the following command: 
 
-ssh-keygen. 
+* ssh-keygen 
 
-This command generate two keys, one public and one private. The public key has to be copy to the authorized_keys file on the Linux instance. Finally change permissions to the .ssh directory and the authorized_keys:
+This command generate two keys, one public and one private. The public key has to be copy to the authorized_keys file on the Linux instance. The private key should be stored in the computer and use every time the grader user connect into the server.  
 
-chmod 700 /home/grader/.ssh
+* open the .ssh/authorized_keys and copy the public key that you get with the previous command. Follow this tutorial: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
 
-chmod 644 /home/grader/.ssh/authorized_keys
+Change permissions to the .ssh directory and the authorized_keys in the Linux instance:
+
+* chmod 700 /home/grader/.ssh
+
+* chmod 644 /home/grader/.ssh/authorized_keys
 
 Finally, change the owner of the directory and authorized_keys file with:
-sudo chown grader .ssh
 
-service ssh restart
+* sudo chown grader .ssh
 
-now you can use ssh to login with the new user you created
+* service ssh restart
 
-ssh -i [privateKeyFilename] grader@3.82.189.241 
+Now you can use ssh to login with the new user you created running the following command from your local computer:
 
-After run this command, open the public key generated in your computer and copy it. Afterwards createI install finger tool to check the users that can access the server. Then I created the grader user with sudo add grader and give it sudo  privileges. In order to allow ssh authentication to the grader user I use the tool ssh-keygen on my machine and paste the public key on the authorized_keys file under the /home/grader/.ssh directory. I change permissions to the .ssh directory and the 
-authorized_keys with 
+* ssh -i [privateKeyFilename] grader@3.82.189.241 
+
 
 # Application Functionality
 
-This app would be deployed using Flask, Apache2 and Postgresql in Linux remote system using Amazon Lightsail. The following  steps consists on the configuration of a database and a web server as well as clone the Flask application to the Linux instance. The WSGI module will be used as an interface between Flask and Apache Server.  
+This app would be deployed using Flask, Apache2 and Postgresql in Linux remote system using Amazon Lightsail. The following steps consists on the configuration of a database and a web server as well as clone the Flask application to the Linux instance. The WSGI module will be used as an interface between Flask and Apache Server.  
 
-Install and configure Apache to serve a Python mod_wsgi application
+## Install and configure Apache to serve a Python mod_wsgi application
 
 Install Apache sudo apt-get install apache2
 
 Install mod_wsgi sudo apt-get install libapache2-mod-wsgi-py3
 
-## Install git, clone and setup your Catalog App project
+### Install git, clone and setup your Catalog App project
 
 Install Git using sudo apt-get install git
 
@@ -126,14 +127,36 @@ pip3 install psycopg2
 pip3 install sqlalchemy_utils
 
 
-### Configure the database with Postgresql 
+## Install and Configure  Postgresql 
 
-For this purpose is necessary to change the database connections within the app from sqlite to Postgresql. This is achieved changing the following files of the app: project_database.py, populate_database.py and __init__.py. The command sudo nano /path/file.py allow for making this changes using the nano text editor. 
+* sudo apt-get install postgresql
+
+* sudo nano /ect/postgresql/9.5/main/pg_hba.conf. Check that remote connections are not allowed
+
+* sudo -u postgres -i to login as postgres default user
+
+* psql to get to the command line interfase of postgresql
+
+Run the following commands in order to create the catalog user and the mineralsitemsusers database
+
+* CREATE USER catalog WITH PASSWORD 'udacitynan';
+* ALTER USER catalog CREATEDB;
+* CREATE DATABASE mineralsitemsusers WITH OWNER catalog;
+
+Connect to the mineralsitemsusers database:
+
+* \c mineralitemsusers
+
+* REVOKE ALL ON SCHEMA public FROM public;
+* GRANT ALL ON SCHEMA public TO mineralsitemsusers;
 
 
-In line 72 of the project_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db) to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). The command sudo nano project_database.py allow t
+After install PostgreSQL, create the catalog user and the mineralsitemsusers database, is necessary to update the database setup and application python files to illustrate the new engine connection. For this purpose is necessary to change the database connections within the app from sqlite to Postgresql. This is achieved changing the following files of the app: project_database.py, populate_database.py and __init__.py. The command sudo nano /path/file.py allow for performing this changes using the nano text editor. 
 
-In line 12 of the file populate_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db') to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers')
+
+In line 72 of the project_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db) to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). The command sudo nano project_database.py allow to do this change.
+
+In line 12 of the file populate_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db') to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). The command sudo nano populate_database.py allow to do this change.
 
 In line 29 of the __init__.py file change the line engine = create_engine('sqlite:///mineralsitemsusers.db?''check_same_thread=False')
 to engine = create_engine(postgresql://catalog:udacitynan@localhost/mineralsitemsusers')
