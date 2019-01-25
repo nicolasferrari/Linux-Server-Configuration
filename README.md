@@ -120,13 +120,13 @@ You should see a (venv) appears before your username in the command line.
 
 ### Install packages for running the app
 
-*```pip3 install Flask```
-*```pip3 install requests```
-*```pip3 install httplib2```
-*```pip3 install oauthclient```
-*```pip3 install sqlalchemy```
-*```pip3 install psycopg2```
-*```pip3 install sqlalchemy_utils```
+* ```pip3 install Flask```
+* ```pip3 install requests```
+* ```pip3 install httplib2```
+* ```pip3 install oauthclient```
+* ```pip3 install sqlalchemy```
+* ```pip3 install psycopg2```
+* ```pip3 install sqlalchemy_utils```
 
 
 ## Install and Configure  Postgresql 
