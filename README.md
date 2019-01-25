@@ -38,15 +38,15 @@ Configure firewalls rules:
 
 ## Create the Grader User 
 
-The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user into the server. The ssh authentication consist of a public and private key that work together. The public key would be copied to the server and the private key is the key that the user store in the local computer and use to connect to the server. The public key would be copy to the /home/grader/.ssh/authorized_keys file in the Linux platform. 
+The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user into the server. The ssh authentication consist of a public and private key that works together. The public key would be copied to the server and the private key is the key that the user store in the local computer and use to connect to the server. The public key would be copied to the /home/grader/.ssh/authorized_keys file in the Linux platform. 
 
-The following command should be running from the server: 
+The following commands should be running from the server: 
 
 * sudo add grader. Create the grader user
 
 * sudo usermod -a -G sudo grader. This give sudo permissions to the grader user 
 
-* su - grader. To change to the grader user in the Linux screen
+* su - grader. To change to the grader user in the Linux platform
 
 * mkdir .ssh. Create the .ssh dirctory in Linux
 
@@ -79,32 +79,34 @@ Now you can use ssh to login with the new user you created running the following
 
 # Application Functionality
 
-This app would be deployed using Flask, Apache2 and Postgresql in Linux remote system using Amazon Lightsail. The following steps consists on the configuration of a database and a web server as well as clone the Flask application to the Linux instance. The WSGI module will be used as an interface between Flask and Apache Server.  
+This app would be deployed using Flask, Apache2 and Postgresql in Linux remote system using Amazon Lightsail. The following steps consists on the configuration of a database and a web server as well as describe the steps to clone the Flask application into the Linux instance and install all the software required. The WSGI module will be used as an interface between Flask and Apache Server.  
 
 ## Install and configure Apache to serve a Python mod_wsgi application
+  
+* sudo apt-get install apache2 Install Apache 
 
-Install Apache sudo apt-get install apache2
-
-Install mod_wsgi sudo apt-get install libapache2-mod-wsgi-py3
+* sudo apt-get install libapache2-mod-wsgi-py3. Install mod_wsgi
 
 ### Install git, clone and setup your Catalog App project
+ 
+* sudo apt-get install git. Install Git 
 
-Install Git using sudo apt-get install git
+* cd /var/www to move to the /var/www directory
 
-Use cd /var/www to move to the /var/www directory
+* sudo mkdir catalogapp Create the application directory 
 
-Create the application directory sudo mkdir catalogapp
-
-Move inside this directory using cd Catalogapp
+* cd catalogapp Move into the catalopapp dicrectory 
 
 Clone the Catalog App to the virtual machine git clone https://github.com/nicolasferrari/catalogapp.git catalogapp
 
 
 Move into the /var/www/catalogapp/catalogapp 
+ 
+* sudo mv application.py __init__.py Rename application.py file to __init__.py 
 
-Rename application.py file to __init__.py using sudo mv application.py __init__.py
+Change the path of the client_id file for oauth2 authentication and locate into the catalogapp path. With the command: 
 
-Change the path of the client_id for oauth2 and locate into the app path. With the command sudo nano __init__.py change the line CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id'] to CLIENT_ID = json.loads(open('/var/www/catalogapp/catalogapp/client_secrets.json','r').read())[web']['client_id']
+* sudo nano __init__.py  change the line CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id'] to CLIENT_ID = json.loads(open('/var/www/catalogapp/catalogapp/client_secrets.json','r').read())[web']['client_id']
 
 ## Install virtual environment
 
@@ -118,13 +120,13 @@ You should see a (venv) appears before your username in the command line.
 
 ### Install packages for running the app
 
-pip3 install Flask
-pip3 install requests
-pip3 install httplib2
-pip3 install oauthclient
-pip3 install sqlalchemy
-pip3 install psycopg2
-pip3 install sqlalchemy_utils
+*pip3 install Flask
+*pip3 install requests
+*pip3 install httplib2
+*pip3 install oauthclient
+*pip3 install sqlalchemy
+*pip3 install psycopg2
+*pip3 install sqlalchemy_utils
 
 
 ## Install and Configure  Postgresql 
@@ -145,30 +147,28 @@ Run the following commands in order to create the catalog user and the mineralsi
 
 Connect to the mineralsitemsusers database:
 
-* \c mineralitemsusers
+* \c mineralsitemsusers
 
 * REVOKE ALL ON SCHEMA public FROM public;
 * GRANT ALL ON SCHEMA public TO mineralsitemsusers;
 
 
-After install PostgreSQL, create the catalog user and the mineralsitemsusers database, is necessary to update the database setup and application python files to illustrate the new engine connection. For this purpose is necessary to change the database connections within the app from sqlite to Postgresql. This is achieved changing the following files of the app: project_database.py, populate_database.py and __init__.py. The command sudo nano /path/file.py allow for performing this changes using the nano text editor. 
+After install PostgreSQL, create the catalog user and the mineralsitemsusers database, is necessary to update the database setup and application python files to illustrate the new engine connection. For this purpose is necessary to change the database connections within the app from sqlite to Postgresql. This is achieved changing the following files of the cataloapp directory: project_database.py, populate_database.py and __init__.py. The command sudo nano /path/file.py allow for performing this changes using the nano text editor. 
 
+* sudo nano project_database.py In line 72 of the project_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db) to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). 
 
-In line 72 of the project_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db) to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). The command sudo nano project_database.py allow to do this change.
+* sudo nano populate_database.py In line 12 of the file populate_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db') to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). 
 
-In line 12 of the file populate_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db') to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). The command sudo nano populate_database.py allow to do this change.
-
-In line 29 of the __init__.py file change the line engine = create_engine('sqlite:///mineralsitemsusers.db?''check_same_thread=False')
+* sudo nano __init__.py In line 29 of the __init__.py file change the line engine = create_engine('sqlite:///mineralsitemsusers.db?''check_same_thread=False')
 to engine = create_engine(postgresql://catalog:udacitynan@localhost/mineralsitemsusers')
 
-Create database schema sudo python project_database.py
-Populate the database with some data python populate_database.py
-
-Run the app with __init__.py and see if the application run correct.
+* python project_database.py Create database schema 
+* python populate_database.py Populate the database with some data 
+* python __init__.py  Run the app with and see if the application run correct.
 
 # Configure and Enable a new Virtual Host
 
-Create catalogapp.conf file with the command: sudo nano /etc/apache2/sites-available/catalogapp.conf
+* sudo nano /etc/apache2/sites-available/catalogapp.conf Create catalogapp.conf file
 
 Add the following lines of code to the file to configure the virtual host.
 
@@ -190,14 +190,14 @@ Add the following lines of code to the file to configure the virtual host.
                 CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 
-Enable the virtual host with the following command: sudo a2ensite catalogapp
+* sudo a2ensite catalogapp Enable the virtual host 
 
 # Create the .wsgi file 
 
 Apache uses the .wsgi file to serve the catalogapp. Move to the /var/www/catalogapp directory and create a file named catalogapp.wsgi with following commands:
 
-cd /var/www/catalogapp
-sudo nano catalogapp.wsgi
+* cd /var/www/catalogapp
+* sudo nano catalogapp.wsgi
 
 Add the following lines of code to the catalogapp.wsgi file
 
@@ -212,35 +212,10 @@ application.secret_key = 'Add your secret key'
 
 Restart Apache to apply the changes with the command:
 
-sudo service apache2 restart 
+* sudo service apache2 restart 
 
-Edit database_setup.py, website.py and functions_helper.py and change engine = create_engine('sqlite:///toyshop.db') to engine = 
 
-create_engine('postgresql://catalog:password@localhost/catalog')
-
-Install pip sudo apt-get install python-pip
-
-Use pip to install dependencies sudo pip install -r requirements.txt
-
-Install psycopg2 sudo apt-get -qqy install postgresql python-psycopg2
-
-Create database schema sudo python database_setup.py
-
-To get connection to the server with the grader account is necessary to run this command : ssh grader@3.82.189.241 -i ~/.ssh/key.pub
-
-Installation of Apache2, WSGI middleware Postgresql:
-
-I have installed these software with the following commands:
-
-sudo apt-get install apache2
-
-sudo apt-get install libapache2-mod-wsgi
-
-sudo apt-get install postgresql
-
-Change the /etc/apache2/sites-enabled/000-default.conf file with the command sudo nano /etc/apache2/sites-enabled/000-default.conf by adding the line WSGIScriptAlias / /var/www/html/myapp.wsgi. With this procedure I ensure that the app is in the default directory that Ubuntu recognize to store applications. 
-
-Some external resources that I use to made all this are: 
+# External resources to complete this project:  
 
 https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
 
