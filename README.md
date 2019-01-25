@@ -203,6 +203,7 @@ Apache uses the .wsgi file to serve the catalogapp. Move to the /var/www/catalog
 
 Add the following lines of code to the catalogapp.wsgi file
 
+```
 #!/usr/bin/python
 import sys
 import logging
@@ -211,6 +212,7 @@ sys.path.insert(0,"/var/www/catalogapp/")
 
 from catalogapp import app as application
 application.secret_key = 'Add your secret key'
+```
 
 Restart Apache to apply the changes with the command:
 
@@ -227,6 +229,6 @@ https://www.digitalocean.com/community/tutorials/how-to-use-roles-and-manage-gra
 
 https://www.cabotsolutions.com/2017/11/a-detailed-study-of-wsgi-web-server-gateway-interface-of-python
 
-3- The public key that I have created for the grader authentication within the server is located on /home/grader/.ssh/authorized_keys.
+
 
 
