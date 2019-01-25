@@ -103,6 +103,93 @@ Move into the /var/www/catalogapp/catalogapp
 
 Rename application.py file to __init__.py using sudo mv application.py __init__.py
 
+Change the path of the client_id for oauth2 and locate into the app path. With the command sudo nano __init__.py change the line CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id'] to CLIENT_ID = json.loads(open('/var/www/catalogapp/catalogapp/client_secrets.json','r').read())[web']['client_id']
+
+## Install virtual environment
+
+$ sudo apt-get install python-pip
+$ sudo pip install virtualenv
+$ sudo virtualenv venv
+$ source venv/bin/activate
+$ sudo chmod -R 777 venv
+
+You should see a (venv) appears before your username in the command line. 
+
+### Install packages for running the app
+
+pip3 install Flask
+pip3 install requests
+pip3 install httplib2
+pip3 install oauthclient
+pip3 install sqlalchemy
+pip3 install psycopg2
+pip3 install sqlalchemy_utils
+
+
+### Configure the database with Postgresql 
+
+For this purpose is necessary to change the database connections within the app from sqlite to Postgresql. This is achieved changing the following files of the app: project_database.py, populate_database.py and __init__.py. The command sudo nano /path/file.py allow for making this changes using the nano text editor. 
+
+
+In line 72 of the project_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db) to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers'). The command sudo nano project_database.py allow t
+
+In line 12 of the file populate_database.py change the line engine = create_engine('sqlite:///mineralsitemsusers.db') to engine = create_engine('postgresql://catalog:udacitynan@localhost/mineralsitemsusers')
+
+In line 29 of the __init__.py file change the line engine = create_engine('sqlite:///mineralsitemsusers.db?''check_same_thread=False')
+to engine = create_engine(postgresql://catalog:udacitynan@localhost/mineralsitemsusers')
+
+Create database schema sudo python project_database.py
+Populate the database with some data python populate_database.py
+
+Run the app with __init__.py and see if the application run correct.
+
+# Configure and Enable a new Virtual Host
+
+Create catalogapp.conf file with the command: sudo nano /etc/apache2/sites-available/catalogapp.conf
+
+Add the following lines of code to the file to configure the virtual host.
+
+<VirtualHost *:80>
+                ServerName 3.82.189.241
+                ServerAdmin admin@3.82.189.241
+                WSGIScriptAlias / /var/www/catalogapp/catalogapp.wsgi
+                <Directory /var/www/catalogapp/catalogapp/>
+                        Order allow,deny
+                        Allow from all
+                </Directory>
+                Alias /static /var/www/catalogapp/catalogapp/static
+                <Directory /var/www/catalogapp/catalogapp/static/>
+                        Order allow,deny
+                        Allow from all
+                </Directory>
+                ErrorLog ${APACHE_LOG_DIR}/error.log
+                LogLevel warn
+                CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+Enable the virtual host with the following command: sudo a2ensite catalogapp
+
+# Create the .wsgi file 
+
+Apache uses the .wsgi file to serve the catalogapp. Move to the /var/www/catalogapp directory and create a file named catalogapp.wsgi with following commands:
+
+cd /var/www/catalogapp
+sudo nano catalogapp.wsgi
+
+Add the following lines of code to the catalogapp.wsgi file
+
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/catalogapp/")
+
+from catalogapp import app as application
+application.secret_key = 'Add your secret key'
+
+Restart Apache to apply the changes with the command:
+
+sudo service apache2 restart 
 
 Edit database_setup.py, website.py and functions_helper.py and change engine = create_engine('sqlite:///toyshop.db') to engine = 
 
