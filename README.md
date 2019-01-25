@@ -172,7 +172,7 @@ to engine = create_engine(postgresql://catalog:udacitynan@localhost/mineralsitem
 
 Add the following lines of code to the file to configure the virtual host.
 
-<mark> <VirtualHost *:80>
+<markstyle="background-color: lightblue"><VirtualHost *:80>
                 ServerName 3.82.189.241
                 ServerAdmin admin@3.82.189.241
                 WSGIScriptAlias / /var/www/catalogapp/catalogapp.wsgi
