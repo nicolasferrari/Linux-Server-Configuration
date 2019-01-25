@@ -110,11 +110,11 @@ Change the path of the client_id file for oauth2 authentication and locate into 
 
 ## Install virtual environment
 
-$ ```sudo apt-get install python-pip```
-$ ```sudo pip install virtualenv```
-$ ```sudo virtualenv venv```
-$ ```source venv/bin/activate```
-$ ```sudo chmod -R 777 venv```
+* ```sudo apt-get install python-pip```
+* ```sudo pip install virtualenv```
+* ```sudo virtualenv venv```
+* ```source venv/bin/activate```
+* ```sudo chmod -R 777 venv```
 
 You should see a (venv) appears before your username in the command line. 
 
