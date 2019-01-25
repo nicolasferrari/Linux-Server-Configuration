@@ -163,7 +163,7 @@ After install PostgreSQL, create the catalog user and the mineralsitemsusers dat
 to engine = create_engine(postgresql://catalog:udacitynan@localhost/mineralsitemsusers')
 
 * ```python project_database.py``` Create database schema 
-* ```python populate_database.py Populate the database with some data 
+* ```python populate_database.py ``` Populate the database with some data 
 * ```python __init__.py```  Run the app with and see if the application run correct.
 
 # Configure and Enable a new Virtual Host
