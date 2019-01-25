@@ -86,7 +86,7 @@ Install Apache sudo apt-get install apache2
 
 Install mod_wsgi sudo apt-get install libapache2-mod-wsgi-py3
 
-Install git, clone and setup your Catalog App project
+## Install git, clone and setup your Catalog App project
 
 Install Git using sudo apt-get install git
 
