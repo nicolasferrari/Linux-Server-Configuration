@@ -172,7 +172,8 @@ to engine = create_engine(postgresql://catalog:udacitynan@localhost/mineralsitem
 
 Add the following lines of code to the file to configure the virtual host.
 
-<markstyle="background-color: lightblue"><VirtualHost *:80>
+```
+<VirtualHost *:80>
                 ServerName 3.82.189.241
                 ServerAdmin admin@3.82.189.241
                 WSGIScriptAlias / /var/www/catalogapp/catalogapp.wsgi
@@ -188,7 +189,8 @@ Add the following lines of code to the file to configure the virtual host.
                 ErrorLog ${APACHE_LOG_DIR}/error.log
                 LogLevel warn
                 CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost> </mark>
+</VirtualHost> 
+```
 
 * sudo a2ensite catalogapp Enable the virtual host 
 
