@@ -15,7 +15,7 @@ Create an instance on Amazon Lightsail in Linux platform with Ubuntu 16.04 LTS. 
 
 * ``` sudo apt-get upgrade ```
 * ``` sudo apt-get update ``` 
-* ``` sudo nano cd etc/.ssh/sshd_config ``` Add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
+* ``` sudo nano cd etc/ssh/sshd_config ``` Add the 2200 port in the etc/ssh/sshd_config file in the line below of port 22(default port)
 
 * On Amazon Ligthsail web site, add a custom port 2200 in the Networking tab 
 
