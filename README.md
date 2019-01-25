@@ -38,7 +38,7 @@ Configure firewalls rules:
 
 ## Create the Grader User 
 
-The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user into the server. The ssh authentication consist of a public and private key that work together. The public key would be copy to the server and the private key is the key that the user store in it computer and use to connect to the server. The public key would be copy to the /home/grader/.ssh/authorized_keys file in the Linux platform. 
+The following commands will be executed in order to create the grader user and allow ssh key authentication connection for the grader user into the server. The ssh authentication consist of a public and private key that work together. The public key would be copied to the server and the private key is the key that the user store in the local computer and use to connect to the server. The public key would be copy to the /home/grader/.ssh/authorized_keys file in the Linux platform. 
 
 The following command should be running from the server: 
 
@@ -50,13 +50,13 @@ The following command should be running from the server:
 
 * mkdir .ssh. Create the .ssh dirctory in Linux
 
-* touch .ssh/authorized_keys. Create the file authorized_keys in the .ssh dirctory
+* touch .ssh/authorized_keys. Create the file authorized_keys in the .ssh directory
 
 From your local computer run the following command: 
 
 * ssh-keygen 
 
-This command generate two keys, one public and one private. The public key has to be copy to the authorized_keys file on the Linux instance. The private key should be stored in the computer and use every time the grader user connect into the server.  
+This command generate two keys, one public and one private. The public key has to be copied into the authorized_keys file on the Linux instance. The private key should be stored in the local computer and use every time the grader user connect into the server.  
 
 * open the .ssh/authorized_keys and copy the public key that you get with the previous command. Follow this tutorial: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
 
